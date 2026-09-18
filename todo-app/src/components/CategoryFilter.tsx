@@ -7,6 +7,7 @@ interface CategoryFilterProps {
 export function CategoryFilter({ categories, value, onChange }: CategoryFilterProps) {
   return (
     <select
+      className="field field-sm"
       data-testid="category-filter"
       value={value ?? ''}
       onChange={(e) => onChange(e.target.value || null)}

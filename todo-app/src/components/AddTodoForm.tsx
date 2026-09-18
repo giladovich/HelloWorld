@@ -28,37 +28,45 @@ export function AddTodoForm({ onAdd }: AddTodoFormProps) {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <input
-        data-testid="todo-text-input"
-        value={text}
-        onChange={(e) => setText(e.target.value)}
-        placeholder="What needs doing?"
-      />
-      <input
-        data-testid="todo-category-input"
-        value={category}
-        onChange={(e) => setCategory(e.target.value)}
-        placeholder="Category (optional)"
-      />
-      <select
-        data-testid="todo-priority-select"
-        value={priority}
-        onChange={(e) => setPriority(e.target.value as Priority)}
-      >
-        <option value="low">Low</option>
-        <option value="medium">Medium</option>
-        <option value="high">High</option>
-      </select>
-      <input
-        data-testid="todo-due-date-input"
-        type="date"
-        value={dueDate}
-        onChange={(e) => setDueDate(e.target.value)}
-      />
-      <button type="submit" data-testid="add-todo-button">
-        Add
-      </button>
+    <form className="add-form" onSubmit={handleSubmit}>
+      <div className="add-form-row">
+        <input
+          className="field field-grow"
+          data-testid="todo-text-input"
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          placeholder="What needs doing?"
+        />
+        <button className="btn btn-primary" type="submit" data-testid="add-todo-button">
+          Add
+        </button>
+      </div>
+      <div className="add-form-row">
+        <input
+          className="field field-sm"
+          data-testid="todo-category-input"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          placeholder="Category (optional)"
+        />
+        <select
+          className="field field-sm"
+          data-testid="todo-priority-select"
+          value={priority}
+          onChange={(e) => setPriority(e.target.value as Priority)}
+        >
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
+        </select>
+        <input
+          className="field field-sm"
+          data-testid="todo-due-date-input"
+          type="date"
+          value={dueDate}
+          onChange={(e) => setDueDate(e.target.value)}
+        />
+      </div>
     </form>
   );
 }

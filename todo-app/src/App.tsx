@@ -38,15 +38,35 @@ export default function App() {
     () => filterTodos(todos, { status, category, search }),
     [todos, status, category, search]
   );
+  const remaining = useMemo(() => todos.filter((t) => !t.completed).length, [todos]);
 
   return (
-    <div>
-      <h1>Todo App</h1>
+    <div className="app">
+      <div className="app-header">
+        <div className="app-header-title">
+          <svg width="26" height="26" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="12" cy="12" r="10" stroke="var(--accent)" strokeWidth="2" />
+            <path
+              d="M7.5 12.5l3 3 6-6.5"
+              stroke="var(--accent)"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          <h1 className="app-title">Todo App</h1>
+        </div>
+        <span className="app-remaining">
+          {remaining} of {todos.length} remaining
+        </span>
+      </div>
       {storageError && <StorageErrorBanner />}
       <AddTodoForm onAdd={addTodo} />
-      <FilterBar value={status} onChange={setStatus} />
-      <CategoryFilter categories={categories} value={category} onChange={setCategory} />
-      <SearchBar value={search} onChange={setSearch} />
+      <div className="toolbar">
+        <FilterBar value={status} onChange={setStatus} />
+        <CategoryFilter categories={categories} value={category} onChange={setCategory} />
+        <SearchBar value={search} onChange={setSearch} />
+      </div>
       {filteredTodos.length === 0 ? (
         <EmptyState
           message={todos.length === 0 ? 'No todos yet — add one above!' : 'No todos match your filters.'}

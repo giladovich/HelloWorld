@@ -27,7 +27,7 @@ export function TodoList({ todos, onToggle, onDelete, onUpdate, onReorder }: Tod
   };
 
   return (
-    <ul>
+    <ul className="todo-list">
       {todos.map((todo) => (
         <TodoItem
           key={todo.id}

@@ -7,7 +7,7 @@ interface FilterBarProps {
 
 export function FilterBar({ value, onChange }: FilterBarProps) {
   return (
-    <div role="group" aria-label="Status filter">
+    <div className="segmented" role="group" aria-label="Status filter">
       <button data-testid="filter-all" aria-pressed={value === 'all'} onClick={() => onChange('all')}>
         All
       </button>

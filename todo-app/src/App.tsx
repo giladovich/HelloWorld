@@ -6,6 +6,7 @@ import { UndoToast } from './components/UndoToast';
 import { FilterBar } from './components/FilterBar';
 import { SearchBar } from './components/SearchBar';
 import { CategoryFilter } from './components/CategoryFilter';
+import { EmptyState } from './components/EmptyState';
 import { filterTodos, uniqueCategories, type StatusFilter } from './filterTodos';
 
 export default function App() {
@@ -43,13 +44,19 @@ export default function App() {
       <FilterBar value={status} onChange={setStatus} />
       <CategoryFilter categories={categories} value={category} onChange={setCategory} />
       <SearchBar value={search} onChange={setSearch} />
-      <TodoList
-        todos={filteredTodos}
-        onToggle={toggleComplete}
-        onDelete={deleteTodo}
-        onUpdate={updateTodo}
-        onReorder={reorderTodos}
-      />
+      {filteredTodos.length === 0 ? (
+        <EmptyState
+          message={todos.length === 0 ? 'No todos yet — add one above!' : 'No todos match your filters.'}
+        />
+      ) : (
+        <TodoList
+          todos={filteredTodos}
+          onToggle={toggleComplete}
+          onDelete={deleteTodo}
+          onUpdate={updateTodo}
+          onReorder={reorderTodos}
+        />
+      )}
       {lastDeleted && <UndoToast deletedText={lastDeleted.todo.text} onUndo={undoDelete} />}
     </div>
   );

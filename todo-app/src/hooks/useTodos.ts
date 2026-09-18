@@ -78,6 +78,19 @@ export function useTodos() {
     [todos, persist]
   );
 
+  const reorderTodos = useCallback(
+    (orderedIds: string[]) => {
+      const idSet = new Set(orderedIds);
+      const affectedSlots = todos
+        .filter((t) => idSet.has(t.id))
+        .sort((a, b) => a.order - b.order)
+        .map((t) => t.order);
+      const slotById = new Map(orderedIds.map((id, i) => [id, affectedSlots[i]]));
+      persist(todos.map((t) => (idSet.has(t.id) ? { ...t, order: slotById.get(t.id)! } : t)));
+    },
+    [todos, persist]
+  );
+
   return {
     todos,
     storageError,
@@ -88,5 +101,6 @@ export function useTodos() {
     dismissDeleteNotice,
     lastDeleted,
     updateTodo,
+    reorderTodos,
   };
 }

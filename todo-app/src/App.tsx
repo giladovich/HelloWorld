@@ -18,6 +18,7 @@ export default function App() {
     dismissDeleteNotice,
     lastDeleted,
     updateTodo,
+    reorderTodos,
   } = useTodos();
   const [status, setStatus] = useState<StatusFilter>('all');
   const [category, setCategory] = useState<string | null>(null);
@@ -47,6 +48,7 @@ export default function App() {
         onToggle={toggleComplete}
         onDelete={deleteTodo}
         onUpdate={updateTodo}
+        onReorder={reorderTodos}
       />
       {lastDeleted && <UndoToast deletedText={lastDeleted.todo.text} onUndo={undoDelete} />}
     </div>

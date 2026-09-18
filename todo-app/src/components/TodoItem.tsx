@@ -6,9 +6,11 @@ interface TodoItemProps {
   onToggle: (id: string) => void;
   onDelete: (id: string) => void;
   onUpdate: (id: string, updates: Partial<Pick<Todo, 'text' | 'category' | 'priority' | 'dueDate'>>) => void;
+  onDragStart: (id: string) => void;
+  onDrop: (id: string) => void;
 }
 
-export function TodoItem({ todo, onToggle, onDelete, onUpdate }: TodoItemProps) {
+export function TodoItem({ todo, onToggle, onDelete, onUpdate, onDragStart, onDrop }: TodoItemProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [text, setText] = useState(todo.text);
   const [category, setCategory] = useState(todo.category ?? '');
@@ -75,7 +77,14 @@ export function TodoItem({ todo, onToggle, onDelete, onUpdate }: TodoItemProps) 
   }
 
   return (
-    <li data-testid="todo-item">
+    <li
+      data-testid="todo-item"
+      data-todo-id={todo.id}
+      draggable
+      onDragStart={() => onDragStart(todo.id)}
+      onDragOver={(e) => e.preventDefault()}
+      onDrop={() => onDrop(todo.id)}
+    >
       <input
         type="checkbox"
         data-testid="todo-checkbox"

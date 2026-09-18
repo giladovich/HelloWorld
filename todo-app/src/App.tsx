@@ -5,8 +5,16 @@ import { TodoList } from './components/TodoList';
 import { UndoToast } from './components/UndoToast';
 
 export default function App() {
-  const { todos, addTodo, toggleComplete, deleteTodo, undoDelete, dismissDeleteNotice, lastDeleted } =
-    useTodos();
+  const {
+    todos,
+    addTodo,
+    toggleComplete,
+    deleteTodo,
+    undoDelete,
+    dismissDeleteNotice,
+    lastDeleted,
+    updateTodo,
+  } = useTodos();
 
   useEffect(() => {
     if (!lastDeleted) return;
@@ -18,7 +26,7 @@ export default function App() {
     <div>
       <h1>Todo App</h1>
       <AddTodoForm onAdd={addTodo} />
-      <TodoList todos={todos} onToggle={toggleComplete} onDelete={deleteTodo} />
+      <TodoList todos={todos} onToggle={toggleComplete} onDelete={deleteTodo} onUpdate={updateTodo} />
       {lastDeleted && <UndoToast deletedText={lastDeleted.todo.text} onUndo={undoDelete} />}
     </div>
   );

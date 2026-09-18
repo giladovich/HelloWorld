@@ -71,6 +71,13 @@ export function useTodos() {
     setLastDeleted(null);
   }, []);
 
+  const updateTodo = useCallback(
+    (id: string, updates: Partial<Pick<Todo, 'text' | 'category' | 'priority' | 'dueDate'>>) => {
+      persist(todos.map((t) => (t.id === id ? { ...t, ...updates } : t)));
+    },
+    [todos, persist]
+  );
+
   return {
     todos,
     storageError,
@@ -80,5 +87,6 @@ export function useTodos() {
     undoDelete,
     dismissDeleteNotice,
     lastDeleted,
+    updateTodo,
   };
 }

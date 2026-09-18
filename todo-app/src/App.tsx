@@ -7,11 +7,13 @@ import { FilterBar } from './components/FilterBar';
 import { SearchBar } from './components/SearchBar';
 import { CategoryFilter } from './components/CategoryFilter';
 import { EmptyState } from './components/EmptyState';
+import { StorageErrorBanner } from './components/StorageErrorBanner';
 import { filterTodos, uniqueCategories, type StatusFilter } from './filterTodos';
 
 export default function App() {
   const {
     todos,
+    storageError,
     addTodo,
     toggleComplete,
     deleteTodo,
@@ -40,6 +42,7 @@ export default function App() {
   return (
     <div>
       <h1>Todo App</h1>
+      {storageError && <StorageErrorBanner />}
       <AddTodoForm onAdd={addTodo} />
       <FilterBar value={status} onChange={setStatus} />
       <CategoryFilter categories={categories} value={category} onChange={setCategory} />

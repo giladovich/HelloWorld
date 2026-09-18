@@ -8,7 +8,9 @@ import { SearchBar } from './components/SearchBar';
 import { CategoryFilter } from './components/CategoryFilter';
 import { EmptyState } from './components/EmptyState';
 import { StorageErrorBanner } from './components/StorageErrorBanner';
+import { SortBar } from './components/SortBar';
 import { filterTodos, uniqueCategories, type StatusFilter } from './filterTodos';
+import { sortTodos, type SortOption } from './sortTodos';
 
 export default function App() {
   const {
@@ -26,6 +28,7 @@ export default function App() {
   const [status, setStatus] = useState<StatusFilter>('all');
   const [category, setCategory] = useState<string | null>(null);
   const [search, setSearch] = useState('');
+  const [sort, setSort] = useState<SortOption>('manual');
 
   useEffect(() => {
     if (!lastDeleted) return;
@@ -38,7 +41,13 @@ export default function App() {
     () => filterTodos(todos, { status, category, search }),
     [todos, status, category, search]
   );
+  const sortedTodos = useMemo(() => sortTodos(filteredTodos, sort), [filteredTodos, sort]);
   const remaining = useMemo(() => todos.filter((t) => !t.completed).length, [todos]);
+
+  const handleReorder = (orderedIds: string[]) => {
+    reorderTodos(orderedIds);
+    setSort('manual');
+  };
 
   return (
     <div className="app">
@@ -65,19 +74,20 @@ export default function App() {
       <div className="toolbar">
         <FilterBar value={status} onChange={setStatus} />
         <CategoryFilter categories={categories} value={category} onChange={setCategory} />
+        <SortBar value={sort} onChange={setSort} />
         <SearchBar value={search} onChange={setSearch} />
       </div>
-      {filteredTodos.length === 0 ? (
+      {sortedTodos.length === 0 ? (
         <EmptyState
           message={todos.length === 0 ? 'No todos yet — add one above!' : 'No todos match your filters.'}
         />
       ) : (
         <TodoList
-          todos={filteredTodos}
+          todos={sortedTodos}
           onToggle={toggleComplete}
           onDelete={deleteTodo}
           onUpdate={updateTodo}
-          onReorder={reorderTodos}
+          onReorder={handleReorder}
         />
       )}
       {lastDeleted && <UndoToast deletedText={lastDeleted.todo.text} onUndo={undoDelete} />}

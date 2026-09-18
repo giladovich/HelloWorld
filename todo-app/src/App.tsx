@@ -1,8 +1,12 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTodos } from './hooks/useTodos';
 import { AddTodoForm } from './components/AddTodoForm';
 import { TodoList } from './components/TodoList';
 import { UndoToast } from './components/UndoToast';
+import { FilterBar } from './components/FilterBar';
+import { SearchBar } from './components/SearchBar';
+import { CategoryFilter } from './components/CategoryFilter';
+import { filterTodos, uniqueCategories, type StatusFilter } from './filterTodos';
 
 export default function App() {
   const {
@@ -15,6 +19,9 @@ export default function App() {
     lastDeleted,
     updateTodo,
   } = useTodos();
+  const [status, setStatus] = useState<StatusFilter>('all');
+  const [category, setCategory] = useState<string | null>(null);
+  const [search, setSearch] = useState('');
 
   useEffect(() => {
     if (!lastDeleted) return;
@@ -22,11 +29,25 @@ export default function App() {
     return () => clearTimeout(timer);
   }, [lastDeleted, dismissDeleteNotice]);
 
+  const categories = useMemo(() => uniqueCategories(todos), [todos]);
+  const filteredTodos = useMemo(
+    () => filterTodos(todos, { status, category, search }),
+    [todos, status, category, search]
+  );
+
   return (
     <div>
       <h1>Todo App</h1>
       <AddTodoForm onAdd={addTodo} />
-      <TodoList todos={todos} onToggle={toggleComplete} onDelete={deleteTodo} onUpdate={updateTodo} />
+      <FilterBar value={status} onChange={setStatus} />
+      <CategoryFilter categories={categories} value={category} onChange={setCategory} />
+      <SearchBar value={search} onChange={setSearch} />
+      <TodoList
+        todos={filteredTodos}
+        onToggle={toggleComplete}
+        onDelete={deleteTodo}
+        onUpdate={updateTodo}
+      />
       {lastDeleted && <UndoToast deletedText={lastDeleted.todo.text} onUndo={undoDelete} />}
     </div>
   );
